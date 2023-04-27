@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:basics/styled_text.dart';
 
+import 'package:basics/dice_roll.dart';
+
 class GradientContainer extends StatelessWidget {
   const GradientContainer({super.key, required this.colors});
 
@@ -16,6 +18,8 @@ class GradientContainer extends StatelessWidget {
 
   final List<Color> colors;
 
+  void rollDice() {}
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,9 +30,7 @@ class GradientContainer extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
       ),
-      child: const Center(
-        child: StyledText('New Data'),
-      ),
+      child: Center(child: DiceRoll()),
     );
   }
 }
