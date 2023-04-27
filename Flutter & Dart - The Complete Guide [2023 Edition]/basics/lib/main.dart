@@ -5,6 +5,9 @@ void main() {
   runApp(const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: GradientContainer(),
+        body: GradientContainer(colors: [
+          Colors.blueGrey,
+          Colors.deepOrangeAccent,
+        ]),
       )));
 }
