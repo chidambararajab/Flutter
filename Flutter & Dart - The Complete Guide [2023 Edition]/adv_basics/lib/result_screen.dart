@@ -2,10 +2,11 @@ import 'package:adv_basics/answer_button.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen(this.changeScreen, this.resultAnswers, {super.key});
+  const ResultScreen(this.changeScreen,
+      {super.key, required this.selectedAnswers});
 
   final void Function(String screen) changeScreen;
-  final List<String> resultAnswers;
+  final List<String> selectedAnswers;
 
   @override
   Widget build(context) {
@@ -14,7 +15,7 @@ class ResultScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ...resultAnswers.map((resultAnswer) => Text(resultAnswer)),
+          ...selectedAnswers.map((resultAnswer) => Text(resultAnswer)),
           AnswerButton(
               label: 'Restart',
               onPressed: () {

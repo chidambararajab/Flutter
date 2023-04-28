@@ -4,10 +4,11 @@ import 'package:adv_basics/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen(this.changeScreen, this.resultAnswers, {super.key});
+  const QuestionsScreen(this.changeScreen,
+      {super.key, required this.onSelectAnswer});
 
   final void Function(String screen) changeScreen;
-  final List<String> resultAnswers;
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionsScreen> createState() {
@@ -21,7 +22,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     void onAnswer(String answer) {
-      widget.resultAnswers.add(answer);
+      widget.onSelectAnswer(answer);
       if (currentQuestion >= questions[currentQuestion].answers.length) {
         widget.changeScreen('result-screen');
       } else {
