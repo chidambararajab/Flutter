@@ -4,9 +4,10 @@ import 'package:adv_basics/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen(this.changeScreen, {super.key});
+  const QuestionsScreen(this.changeScreen, this.resultAnswers, {super.key});
 
   final void Function(String screen) changeScreen;
+  final List<String> resultAnswers;
 
   @override
   State<QuestionsScreen> createState() {
@@ -19,7 +20,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void onAnswer() {
+    void onAnswer(String answer) {
+      widget.resultAnswers.add(answer);
       if (currentQuestion >= questions[currentQuestion].answers.length) {
         widget.changeScreen('result-screen');
       } else {
@@ -55,7 +57,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 .getShuffledAnswers()
                 .map((answer) => AnswerButton(
                       label: answer,
-                      onPressed: onAnswer,
+                      onPressed: () {
+                        onAnswer(answer);
+                      },
                     ))
           ],
         ),

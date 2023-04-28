@@ -14,6 +14,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   var activeScreenName = 'start-screen';
+  List<String> resultAnswers = [];
 
   void changeScreen(screen) {
     setState(() {
@@ -26,9 +27,9 @@ class _QuizState extends State<Quiz> {
     Widget activeScreen = StartScreen(changeScreen);
 
     if (activeScreenName == 'question-screen') {
-      activeScreen = QuestionsScreen(changeScreen);
+      activeScreen = QuestionsScreen(changeScreen, resultAnswers);
     } else if (activeScreenName == 'result-screen') {
-      activeScreen = ResultScreen(changeScreen);
+      activeScreen = ResultScreen(changeScreen, resultAnswers);
     }
 
     return MaterialApp(
