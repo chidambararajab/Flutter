@@ -4,10 +4,8 @@ import 'package:adv_basics/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen(this.changeScreen,
-      {super.key, required this.onSelectAnswer});
+  const QuestionsScreen({super.key, required this.onSelectAnswer});
 
-  final void Function(String screen) changeScreen;
   final void Function(String answer) onSelectAnswer;
 
   @override
@@ -23,13 +21,10 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   Widget build(BuildContext context) {
     void onAnswer(String answer) {
       widget.onSelectAnswer(answer);
-      if (currentQuestion >= questions[currentQuestion].answers.length) {
-        widget.changeScreen('result-screen');
-      } else {
-        setState(() {
-          currentQuestion++;
-        });
-      }
+
+      setState(() {
+        currentQuestion++;
+      });
     }
 
     return SizedBox(
