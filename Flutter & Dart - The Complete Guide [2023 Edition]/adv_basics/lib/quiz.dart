@@ -1,6 +1,6 @@
 import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/result_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:adv_basics/gradient_container.dart';
 import 'package:adv_basics/start_screen.dart';
 
 class Quiz extends StatefulWidget {
@@ -15,9 +15,9 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   var activeScreenName = 'start-screen';
 
-  void changeScreen() {
+  void changeScreen(screen) {
     setState(() {
-      activeScreenName = 'question-screen';
+      activeScreenName = screen;
     });
   }
 
@@ -26,7 +26,9 @@ class _QuizState extends State<Quiz> {
     Widget activeScreen = StartScreen(changeScreen);
 
     if (activeScreenName == 'question-screen') {
-      activeScreen = const QuestionsScreen();
+      activeScreen = QuestionsScreen(changeScreen);
+    } else if (activeScreenName == 'result-screen') {
+      activeScreen = ResultScreen(changeScreen);
     }
 
     return MaterialApp(
