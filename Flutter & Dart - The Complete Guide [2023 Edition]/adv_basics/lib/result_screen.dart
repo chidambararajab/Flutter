@@ -31,7 +31,9 @@ class ResultScreen extends StatelessWidget {
     final List<Map<String, Object>> summaryData = getSummaryData();
     final int totalQuestions = questions.length;
     final int numbCorrectQuestions = summaryData
-        .where((item) => item['correct_answer'] == item['selected_answer'])
+        .where(
+          (item) => item['correct_answer'] == item['selected_answer'],
+        )
         .length;
 
     return SizedBox(
