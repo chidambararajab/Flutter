@@ -39,10 +39,7 @@ class _NewExpenssState extends State<NewExpenss> {
     final titleValidation = _titleController.text.trim().isEmpty;
     final amountValidation = double.tryParse(_amountController.text);
 
-    if (titleValidation ||
-        amountValidation == null ||
-        amountValidation <= 0 ||
-        _selectedDropdownValue == null) {
+    if (titleValidation || amountValidation == null || amountValidation <= 0) {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
