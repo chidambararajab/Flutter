@@ -11,6 +11,7 @@ class NewExpenss extends StatefulWidget {
 class _NewExpenssState extends State<NewExpenss> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  Category? _selectedDropdownValue;
 
   DateTime _selectedDate = DateTime.now();
 
@@ -21,13 +22,39 @@ class _NewExpenssState extends State<NewExpenss> {
 
     final pickedDate = await showDatePicker(
         context: context,
-        initialDate: now,
+        initialDate: _selectedDate,
         firstDate: firstDate,
         lastDate: lastDate);
 
     setState(() {
       _selectedDate = pickedDate as DateTime;
     });
+  }
+
+  void _addNewExpense() {
+    final titleValidation = _titleController.text.trim().isEmpty;
+    final amountValidation = double.tryParse(_amountController.text);
+
+    if (titleValidation ||
+        amountValidation == null ||
+        amountValidation <= 0 ||
+        _selectedDropdownValue == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Title'),
+          content: const Text(
+              'Please make sure a valid title, amount and date is added'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Okay'))
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -82,8 +109,28 @@ class _NewExpenssState extends State<NewExpenss> {
               ))
             ],
           ),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
+              DropdownButton(
+                  value: _selectedDropdownValue,
+                  items: Category.values
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category.name),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value == null) return;
+                    setState(() {
+                      _selectedDropdownValue = value;
+                    });
+                  }),
+              const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   _amountController.text = '';
@@ -93,7 +140,7 @@ class _NewExpenssState extends State<NewExpenss> {
                 child: const Text('Close'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _addNewExpense,
                 child: const Text('Submit'),
               ),
             ],
