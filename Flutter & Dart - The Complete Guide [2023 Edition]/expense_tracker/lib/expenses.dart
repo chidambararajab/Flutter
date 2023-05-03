@@ -55,7 +55,7 @@ class _ExpenseState extends State<Expenses> {
             });
           },
         ),
-        content: const Text('Expese is deleted'),
+        content: const Text('Expense deleted'),
       ),
     );
   }
