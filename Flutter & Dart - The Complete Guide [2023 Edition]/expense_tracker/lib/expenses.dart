@@ -1,3 +1,4 @@
+import 'package:expense_tracker/chart/chart.dart';
 import 'package:expense_tracker/expenses_list.dart';
 import 'package:expense_tracker/modal/expense.dart';
 import 'package:expense_tracker/new_expense.dart';
@@ -99,7 +100,7 @@ class _ExpenseState extends State<Expenses> {
         ),
         body: Column(
           children: [
-            const Text('Graph'),
+            Chart(expenses: _expenses),
             Expanded(
               child: listOfExpenses,
             ),
