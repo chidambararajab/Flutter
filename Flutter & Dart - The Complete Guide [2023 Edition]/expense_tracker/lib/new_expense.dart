@@ -1,3 +1,4 @@
+import 'package:expense_tracker/modal/expense.dart';
 import 'package:flutter/material.dart';
 
 class NewExpenss extends StatefulWidget {
@@ -10,6 +11,24 @@ class NewExpenss extends StatefulWidget {
 class _NewExpenssState extends State<NewExpenss> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+
+  DateTime _selectedDate = DateTime.now();
+
+  void _showCurrentDateCalender() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final lastDate = now;
+
+    final pickedDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: lastDate);
+
+    setState(() {
+      _selectedDate = pickedDate as DateTime;
+    });
+  }
 
   @override
   void dispose() {
@@ -32,25 +51,50 @@ class _NewExpenssState extends State<NewExpenss> {
             ),
             keyboardType: TextInputType.text,
           ),
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(
-              label: Text('Amount'),
-            ),
-            keyboardType: TextInputType.number,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    label: Text('Amount'),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(formater.format(_selectedDate)),
+                  IconButton(
+                    onPressed: _showCurrentDateCalender,
+                    icon: const Icon(
+                      Icons.calendar_month,
+                    ),
+                  ),
+                ],
+              ))
+            ],
           ),
           Row(
             children: [
               ElevatedButton(
-                onPressed: () {},
-                child: const Text('Submit'),
-              ),
-              ElevatedButton(
                 onPressed: () {
                   _amountController.text = '';
                   _titleController.text = '';
+                  Navigator.pop(context);
                 },
-                child: const Text('Reset'),
+                child: const Text('Close'),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Submit'),
               ),
             ],
           )
