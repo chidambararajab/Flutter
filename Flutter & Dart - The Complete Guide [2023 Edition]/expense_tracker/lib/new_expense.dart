@@ -2,7 +2,9 @@ import 'package:expense_tracker/modal/expense.dart';
 import 'package:flutter/material.dart';
 
 class NewExpenss extends StatefulWidget {
-  const NewExpenss({super.key});
+  const NewExpenss({super.key, required this.addExpense});
+
+  final Function(Expense data) addExpense;
 
   @override
   State<NewExpenss> createState() => _NewExpenssState();
@@ -11,7 +13,7 @@ class NewExpenss extends StatefulWidget {
 class _NewExpenssState extends State<NewExpenss> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  Category? _selectedDropdownValue;
+  Category _selectedDropdownValue = Category.travel;
 
   DateTime _selectedDate = DateTime.now();
 
@@ -26,8 +28,10 @@ class _NewExpenssState extends State<NewExpenss> {
         firstDate: firstDate,
         lastDate: lastDate);
 
+    if (pickedDate == null) return;
+
     setState(() {
-      _selectedDate = pickedDate as DateTime;
+      _selectedDate = pickedDate;
     });
   }
 
@@ -54,7 +58,18 @@ class _NewExpenssState extends State<NewExpenss> {
           ],
         ),
       );
+      return;
     }
+
+    final Expense expense = Expense(
+      title: _titleController.text.trim(),
+      amount: double.tryParse(_amountController.text)!,
+      date: _selectedDate,
+      category: _selectedDropdownValue!,
+    );
+
+    widget.addExpense(expense);
+    Navigator.pop(context);
   }
 
   @override
