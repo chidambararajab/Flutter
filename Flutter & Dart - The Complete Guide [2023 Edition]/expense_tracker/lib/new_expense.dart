@@ -12,6 +12,13 @@ class _NewExpenssState extends State<NewExpenss> {
   final _amountController = TextEditingController();
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
