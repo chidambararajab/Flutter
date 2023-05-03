@@ -34,6 +34,12 @@ class _ExpenseState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _expenses.remove(expense);
+    });
+  }
+
   _showAddExpenseModal() {
     return showModalBottomSheet(
       isScrollControlled: true,
@@ -44,9 +50,26 @@ class _ExpenseState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    var listOfExpenses = const Center(
+      child: Text(
+        'No expense found',
+      ),
+    );
+
+    if (_expenses.isNotEmpty) {
+      listOfExpenses = Center(
+        child: ExpensesList(
+          expenses: _expenses,
+          removeExpense: _removeExpense,
+        ),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('Expenses'),
+          centerTitle: false,
           actions: [
             IconButton(
               onPressed: _showAddExpenseModal,
@@ -58,9 +81,7 @@ class _ExpenseState extends State<Expenses> {
           children: [
             const Text('Graph'),
             Expanded(
-              child: ExpensesList(
-                expenses: _expenses,
-              ),
+              child: listOfExpenses,
             ),
           ],
         ),
