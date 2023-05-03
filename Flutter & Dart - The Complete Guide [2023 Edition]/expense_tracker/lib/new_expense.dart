@@ -62,7 +62,7 @@ class _NewExpenssState extends State<NewExpenss> {
       title: _titleController.text.trim(),
       amount: double.tryParse(_amountController.text)!,
       date: _selectedDate,
-      category: _selectedDropdownValue!,
+      category: _selectedDropdownValue,
     );
 
     widget.addExpense(expense);
