@@ -1,31 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/widgets/meal_item.dart';
 
-class Meals extends StatelessWidget {
-  const Meals({
+class MealsScreen extends StatelessWidget {
+  const MealsScreen({
     super.key,
-    this.title,
+    required this.title,
     required this.meals,
   });
 
-  final String? title;
+  final String title;
   final List<Meal> meals;
 
   @override
   Widget build(BuildContext context) {
-    var content = const Text('No meals found');
+    Widget content = Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'No meals found',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No meals found',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          ),
+        ],
+      ),
+    );
 
     if (meals.isNotEmpty) {
-      content = const Text('Meals found');
+      content = ListView.builder(
+        itemCount: meals.length,
+        itemBuilder: (ctx, index) => MealItem(meal: meals[index]),
+      );
     }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title ?? 'Specific Category'),
+        title: Text(title),
         titleTextStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
               color: Theme.of(context).colorScheme.onBackground,
+              fontSize: 20,
             ),
       ),
       body: Container(
+        padding: const EdgeInsets.all(16),
         child: content,
       ),
     );
