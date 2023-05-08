@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:meals/data/dummy_data.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widgets/main_drawer.dart';
+
+const kInitialFilter = {
+  Filter.isGlutenFree: false,
+  Filter.isLactoseFree: false,
+  Filter.isVeg: false,
+  Filter.isVegan: false,
+};
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -14,7 +22,8 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   int _selectedIndex = 0;
-  List<Meal> _favorites = [];
+  List<Meal> favorites = [];
+  Map<Filter, bool> _filters = kInitialFilter;
 
   void _onChangeIndex(index) {
     setState(() {
@@ -32,14 +41,14 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   void _onToggleFavorite(Meal meal) {
-    if (_favorites.contains(meal)) {
+    if (favorites.contains(meal)) {
       setState(() {
-        _favorites.remove(meal);
+        favorites.remove(meal);
       });
       _showSnackBar('Meal is removed');
     } else {
       setState(() {
-        _favorites.add(meal);
+        favorites.add(meal);
       });
       _showSnackBar('Meal is added');
     }
@@ -51,10 +60,14 @@ class _TabScreenState extends State<TabScreen> {
       final result = await Navigator.push<Map<Filter, bool>>(
           context,
           MaterialPageRoute(
-            builder: (ctx) => const FiltersScreen(),
+            builder: (ctx) => FiltersScreen(
+              currentFilters: _filters,
+            ),
           ));
 
-      print(result);
+      setState(() {
+        _filters = result ?? kInitialFilter;
+      });
     } else {
       Navigator.of(context).pop();
     }
@@ -62,14 +75,31 @@ class _TabScreenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Meal> filteredMeals = dummyMeals.where((meal) {
+      if (_filters[Filter.isGlutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (_filters[Filter.isLactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (_filters[Filter.isVeg]! && !meal.isVegetarian) {
+        return false;
+      }
+      if (_filters[Filter.isVeg]! && !meal.isVegan) {
+        return false;
+      }
+      return true;
+    }).toList();
+
     Widget content = CategoriesScreen(
       onToggleFavorite: _onToggleFavorite,
+      filteredMeals: filteredMeals,
     );
     String barTitle = 'Categories';
 
     if (_selectedIndex == 1) {
       content = MealsScreen(
-        meals: _favorites,
+        meals: favorites,
         onToggleFavorite: _onToggleFavorite,
       );
       barTitle = 'Your Favorites';
