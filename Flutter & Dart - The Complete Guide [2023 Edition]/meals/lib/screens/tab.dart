@@ -20,26 +20,40 @@ class _TabScreenState extends State<TabScreen> {
     });
   }
 
+  void _showSnackBar(message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
   void _onToggleFavorite(Meal meal) {
     if (_favorites.contains(meal)) {
       setState(() {
         _favorites.remove(meal);
       });
+      _showSnackBar('Meal is removed');
     } else {
       setState(() {
         _favorites.add(meal);
       });
+      _showSnackBar('Meal is added');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const CategoriesScreen();
+    Widget content = CategoriesScreen(
+      onToggleFavorite: _onToggleFavorite,
+    );
     String barTitle = 'Categories';
 
     if (_selectedIndex == 1) {
       content = MealsScreen(
         meals: _favorites,
+        onToggleFavorite: _onToggleFavorite,
       );
       barTitle = 'Your Favorites';
     }
