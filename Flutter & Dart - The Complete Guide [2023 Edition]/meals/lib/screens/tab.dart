@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:meals/data/dummy_data.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/providers/favorite_meals_provider.dart';
 import 'package:meals/providers/meals_provider.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
@@ -25,36 +26,12 @@ class TabScreen extends ConsumerStatefulWidget {
 
 class _TabScreenState extends ConsumerState<TabScreen> {
   int _selectedIndex = 0;
-  List<Meal> favorites = [];
   Map<Filter, bool> _filters = kInitialFilter;
 
   void _onChangeIndex(index) {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  void _showSnackBar(message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-  void _onToggleFavorite(Meal meal) {
-    if (favorites.contains(meal)) {
-      setState(() {
-        favorites.remove(meal);
-      });
-      _showSnackBar('Meal is removed');
-    } else {
-      setState(() {
-        favorites.add(meal);
-      });
-      _showSnackBar('Meal is added');
-    }
   }
 
   void _navigateTo(String screen) async {
@@ -79,6 +56,7 @@ class _TabScreenState extends ConsumerState<TabScreen> {
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
 
     final List<Meal> filteredMeals = meals.where((meal) {
       if (_filters[Filter.isGlutenFree]! && !meal.isGlutenFree) {
@@ -97,15 +75,13 @@ class _TabScreenState extends ConsumerState<TabScreen> {
     }).toList();
 
     Widget content = CategoriesScreen(
-      onToggleFavorite: _onToggleFavorite,
       filteredMeals: filteredMeals,
     );
     String barTitle = 'Categories';
 
     if (_selectedIndex == 1) {
       content = MealsScreen(
-        meals: favorites,
-        onToggleFavorite: _onToggleFavorite,
+        meals: favoriteMeals,
       );
       barTitle = 'Your Favorites';
     }
